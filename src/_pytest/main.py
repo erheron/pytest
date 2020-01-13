@@ -104,6 +104,13 @@ def pytest_addoption(parser):
         "'root_dir/another_dir/'; absolute path: '/home/user/root_dir'; path with variables: "
         "'$HOME/root_dir'.",
     )
+    group._addoption(
+        "--drop-rootdir-keyword",
+        action="store_true",
+        default=False,
+        dest="drop_rootdir_keyword",
+        help="Drop session keyword for path, when it equals the value of rootdir",
+    )
 
     group = parser.getgroup("collect", "collection")
     group.addoption(

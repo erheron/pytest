@@ -755,6 +755,7 @@ class Config:
         self._cleanup = []  # type: List[Callable[[], None]]
         self.pluginmanager.register(self, "pytestconfig")
         self._configured = False
+        self.drop_rootdir_keyword = True
         self.hook.pytest_addoption.call_historic(
             kwargs=dict(parser=self._parser, pluginmanager=self.pluginmanager)
         )
