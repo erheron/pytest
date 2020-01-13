@@ -112,8 +112,8 @@ class Node:
         self.fspath = fspath or getattr(parent, "fspath", None)
 
         #: keywords/markers collected from all scopes
-        # if (not self.config.drop_rootdir_keyword) or self.fspath != self.config.rootdir:
-        self.keywords = NodeKeywords(self)
+        if (not self.config.drop_rootdir_keyword) or self.fspath != self.config.rootdir:
+            self.keywords = NodeKeywords(self)
 
         #: the marker objects belonging to this node
         self.own_markers = []  # type: List[Mark]
