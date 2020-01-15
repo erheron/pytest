@@ -23,6 +23,8 @@ def getcfg(args, config=None):
     Search the list of arguments for a valid ini-file for pytest,
     and return a tuple of (rootdir, inifile, cfg-dict).
 
+    If --rootdir=DIR was provided via command line, search from DIR and upwards
+
     note: config is optional and used only to issue warnings explicitly (#2891).
     """
     inibasenames = ["pytest.ini", "tox.ini", "setup.cfg"]
@@ -113,6 +115,8 @@ def determine_setup(
     rootdir_cmd_arg: Optional[str] = None,
     config: Optional["Config"] = None,
 ):
+    # implementing initial proposal in https://github.com/pytest-dev/pytest/issues/6376,
+    # we start looking for configuration files from rootdir_cmd_arg, if given
     dirs = get_dirs_from_args(args)
     if inifile:
         iniconfig = py.iniconfig.IniConfig(inifile)
@@ -131,7 +135,10 @@ def determine_setup(
         if rootdir_cmd_arg is None:
             rootdir = get_common_ancestor(dirs)
     else:
-        ancestor = get_common_ancestor(dirs)
+        if rootdir_cmd_arg:
+            ancestor = get_common_ancestor([py.path.local(rootdir_cmd_arg)])
+        else:
+            ancestor = get_common_ancestor(dirs)
         rootdir, inifile, inicfg = getcfg([ancestor], config=config)
         if rootdir is None and rootdir_cmd_arg is None:
             for possible_rootdir in ancestor.parts(reverse=True):
