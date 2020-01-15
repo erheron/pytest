@@ -952,6 +952,8 @@ class Config:
             if not args:
                 if self.invocation_dir == self.rootdir:
                     args = self.getini("testpaths")
+                if not args and self.getini("rootdir_cmd_arg"):
+                    args = self.getini(self.getini("rootdir_cmd_arg"))
                 if not args:
                     args = [str(self.invocation_dir)]
             self.args = args
